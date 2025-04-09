@@ -1,0 +1,205 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Plan {
+  id            Int           @id @default(autoincrement())
+  name          String
+  features      Feature[]
+  price         Float
+  subscriptions Subscription?
+}
+
+model Feature {
+  id     Int    @id @default(autoincrement())
+  name   String
+  planId Int?   @unique
+  Plan   Plan?  @relation(fields: [planId], references: [id])
+}
+
+model Subscription {
+  id            Int      @id @default(autoincrement())
+  startDate     DateTime
+  endDate       DateTime
+  paymentStatus String
+  tenantId      Int      @unique
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  planId        Int      @unique
+  plan          Plan     @relation(fields: [planId], references: [id])
+}
+
+model Tenant {
+  id                    Int                 @id @default(autoincrement())
+  name                  String
+  url                   String              @unique
+  tenantWallet          TenantWallet?
+  contract              Contract?
+  users                 TenantUser[]
+  products              Product[]
+  activeSubSubscription Subscription?
+  verificationToken     VerificationToken[]
+  isActive              Boolean             @default(true)
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  claim                 Claim[]
+  APIKey                APIKey[]
+}
+
+model TenantUser {
+  id                Int                @id @default(autoincrement())
+  firstName         String
+  lastName          String
+  email             String
+  password          String
+  isEmailVerified   Boolean            @default(false)
+  verificationToken VerificationToken?
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  tenantId          Int
+  tenant            Tenant             @relation(fields: [tenantId], references: [id])
+  roleId            Int
+  role              Role               @relation(fields: [roleId], references: [id])
+
+  @@unique([email, tenantId])
+  @@index([tenantId])
+}
+
+model TenantWallet {
+  id                  Int    @id @default(autoincrement())
+  address             String @unique
+  encryptedPrivateKey String
+  tenantId            Int    @unique
+  tenant              Tenant @relation(fields: tenantId, references: id)
+}
+
+model VerificationToken {
+  id         Int        @id @default(autoincrement())
+  token      String     @unique
+  expiration DateTime
+  tenantId   Int
+  tenant     Tenant     @relation(fields: [tenantId], references: [id])
+  userId     Int        @unique
+  user       TenantUser @relation(fields: [userId], references: [id])
+
+  @@index([tenantId])
+}
+
+model APIKey {
+  id        Int      @id @default(autoincrement())
+  apiKey    String   @unique
+  tenantId  Int
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+model Contract {
+  id              Int     @id @default(autoincrement())
+  contractAddress String  @unique
+  isActive        Boolean @default(true) // New field to track contract status
+  tenantId        Int     @unique
+  tenant          Tenant  @relation(fields: [tenantId], references: [id])
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String
+  code        String       @unique
+  permissions Permission[]
+  users       TenantUser[]
+}
+
+model Permission {
+  id     Int    @id @default(autoincrement())
+  code   String @unique
+  name   String
+  roleId Int
+  role   Role   @relation(fields: [roleId], references: [id])
+}
+
+model Product {
+  id          Int    @id @default(autoincrement())
+  productName String
+  description String
+  imageUrl    String
+  tenantId    Int
+  serialId    String @unique
+  tenant      Tenant @relation(fields: [tenantId], references: [id])
+  nft         NFT?
+}
+
+model NFT {
+  id             Int     @id @default(autoincrement())
+  ownerAddress   String
+  tokenId        String
+  nftMetadataCid String
+  productId      Int     @unique
+  product        Product @relation(fields: [productId], references: [id])
+  claim          Claim?
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  email      String      @unique
+  isActive   Boolean     @default(true)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  claims     Claim[]
+  userWallet UserWallet?
+}
+
+model UserWallet {
+  id                  Int    @id @default(autoincrement())
+  address             String @unique
+  encryptedPrivateKey String
+  userId              Int    @unique
+  user                User   @relation(fields: userId, references: id)
+}
+
+model Claim {
+  id        Int      @id @default(autoincrement())
+  claimType String
+  isClaimed Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  tenantId  Int
+  nftId     Int      @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  nft       NFT      @relation(fields: [nftId], references: [id])
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+}
+
+model TransactionType {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  code               String               @unique
+  transactionHistory TransactionHistory[]
+}
+
+model TransactionHistory {
+  id                Int             @id @default(autoincrement())
+  transactionId     String          @unique
+  transactionDate   DateTime
+  transactionTypeId Int
+  fromAddress       String
+  toAddress         String
+  isActive          Boolean         @default(true)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  type              TransactionType @relation(fields: [transactionTypeId], references: [id])
+
+  @@index([transactionTypeId])
+}

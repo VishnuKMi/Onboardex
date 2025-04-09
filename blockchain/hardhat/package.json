@@ -1,0 +1,26 @@
+{
+  "name": "@onboardex/contracts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "exports": {
+    "./artifacts": "./artifacts/*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
+    "erc721a": "^4.2.3",
+    "hardhat": "^2.14.1"
+  },
+  "dependencies": {
+    "@opengsn/contracts": "3.0.0-beta.6",
+    "@openzeppelin/contracts": "^4.9.0",
+    "dotenv": "^16.1.3"
+  }
+}

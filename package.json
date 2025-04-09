@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "scripts": {
+    "fe:admin:dev": "cd frontend/admin && pnpm run fe:admin:dev",
+    "fe:marketing:dev": "cd frontend/marketing && pnpm run fe:marketing:dev",
+    "fe:tenant:dev": "cd frontend/tenant && pnpm run fe:tenant:dev",
+    "fe:user:dev": "cd frontend/user && pnpm run fe:user:dev",
+    "fe:shop:dev": "cd frontend/wearable-nft-storefront && pnpm run fe:shop:dev",
+    "backend:dev": "cd apps/backend && pnpm run  backend:dev",
+    "fe:admin:build": "cd frontend/admin && pnpm run fe:admin:build",
+    "fe:marketing:build": "cd frontend/marketing && pnpm run fe:marketing:build",
+    "fe:tenant:build": "cd frontend/tenant && pnpm run fe:tenant:build",
+    "fe:user:build": "cd frontend/user && pnpm run fe:user:build",
+    "fe:shop:build": "cd frontend/wearable-nft-storefront && pnpm run fe:shop:build",
+    "backend:build": "cd apps/backend && pnpm run  backend:build",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "@turbo/gen": "^1.9.7",
+    "eslint": "^7.32.0",
+    "eslint-config-custom": "workspace:*",
+    "kill-port": "^2.0.1",
+    "prettier": "^2.5.1",
+    "turbo": "latest"
+  },
+  "packageManager": "pnpm@10.8.0",
+  "name": "onboardex"
+}
