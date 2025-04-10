@@ -8,7 +8,7 @@
 
 # Introduction
 
-Welcome to Wearable NFTs,
+Welcome to Onboardex(Wearable NFTs),
 The revolutionary NFT Minting Platform-as-a-Service (PAAS) designed to transform the commercial industry. Our platform enables E-commerce platforms to effortlessly mint unique and valuable NFTs for each order placed by their consumers, adding a new level of personalization and exclusivity to their product offerings.
 
 ### Purpose:
