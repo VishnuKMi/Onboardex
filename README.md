@@ -50,7 +50,7 @@ Explore how our product can enhance functionality, boost customer engagement, an
 
 ### Overview:
 
-<img src="/assets/overview.png" width="800" height="400">
+<img src="/assets/dash1.png" width="800" height="400">
 
 The diagram highlights how our platform enables e-commerce platforms to seamlessly integrate NFT minting capabilities, offering exclusive and personalized digital assets to customers
 
